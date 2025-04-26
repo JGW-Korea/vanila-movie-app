@@ -57,3 +57,27 @@ export function createRouter(routes) {
     routerRender(routes);
   };
 }
+
+// 상태 관리(State Management) 클래스 정의
+export class Store {
+  constructor(state) {
+    this.state = {}; // 외부 접근용 상태 객체
+    this.observers = {}; // 상태 변경 시 실행될 콜백 목록
+
+    // 상태를 key 단위로 감싸서 변경 감지 및 알림 처리
+    for (const key in state) {
+      Object.defineProperty(this.state, key, {
+        get: () => state[key],
+        set: (value) => {
+          state[key] = value; // 내부 상태 업데이트
+          this.observers[key].forEach((observer) => observer()); // 구독자 실행
+        },
+      });
+    }
+  }
+
+  // 상태 변경을 감지할 콜백 함수를 등록하는 메서드
+  subscribe(key, cb) {
+    Array.isArray(this.observers[key]) ? this.observers[key].push(cb) : (this.observers[key] = [cb]);
+  }
+}
