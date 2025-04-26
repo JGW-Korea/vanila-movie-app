@@ -14,3 +14,46 @@ export class Component {
   // 자식 컴포넌트에서 오버라이딩하여 개별 렌더링 로직을 수행
   render() {}
 }
+
+// 라우터(Router) 전환 처리 -> 렌더링 로직
+function routerRender(routes) {
+  // Hash Router가 아닌 경우 초기 경로를 "/#/"로 설정 (예외 처리)
+  if (!location.hash) {
+    history.replaceState("", null, "/#/");
+  }
+
+  const routerView = document.querySelector("router-view");
+  const [hash, queryString = ""] = location.hash.split("?");
+
+  // Query String 파싱 -> History State에 저장
+  const query = queryString.split("&").reduce((acc, curr) => {
+    const [key, value] = curr.split("=");
+    acc[key] = value;
+    return acc;
+  }, {});
+
+  history.replaceState(query, ""); // 현재 히스토리 주소를 바꾸지 않고, 쿼리 스트링 값을 상태에 저장
+
+  // 현재 경로에 맞는 라우트(Route) 찾기
+  const currentRoute = routes.find((route) => new RegExp(`${route.path}/?$`).test(hash));
+
+  // 라우터 뷰 초기화 후 해당 컴포넌트 렌더링
+  routerView.innerHTML = ""; // 초기화 작업은 innerHTML로 진행해도 XSS 보안 위험 없음
+  routerView.append(new currentRoute.component().el);
+
+  // 페이지 전환 시 스크롤을 맨 위로 초기화
+  window.scrollTo(0, 0);
+}
+
+// 라우터 도구 정의 -> 초기화 + 이벤트 등록
+export function createRouter(routes) {
+  return function () {
+    // popstate 이벤트 감지 -> URL 변경 시 라우트 렌더링
+    window.addEventListener("popstate", () => {
+      routerRender(routes);
+    });
+
+    // 최초 페이지 로드 시 라우트 렌더링
+    routerRender(routes);
+  };
+}
