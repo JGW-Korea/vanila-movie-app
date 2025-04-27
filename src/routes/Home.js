@@ -1,8 +1,14 @@
+import Headline from "../components/Headline";
 import { Component } from "../core";
 
 // Home Route
 export default class Home extends Component {
   render() {
-    this.el.innerHTML = /* html */ `<h1>Hello World</h1>`;
+    const headeline = new Headline().el;
+
+    this.el.classList.add("container");
+
+    // 실제 화면에 노출되는 하위 컴포넌트 삽입
+    this.el.append(headeline);
   }
 }
