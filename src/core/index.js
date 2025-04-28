@@ -70,7 +70,11 @@ export class Store {
         get: () => state[key],
         set: (value) => {
           state[key] = value; // 내부 상태 업데이트
-          this.observers[key].forEach((observer) => observer()); // 구독자 실행
+
+          // 호출할 콜백이 있는 경우!
+          if (Array.isArray(this.observers[key])) {
+            this.observers[key].forEach((observer) => observer(val));
+          }
         },
       });
     }
