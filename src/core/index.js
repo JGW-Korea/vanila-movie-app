@@ -73,7 +73,7 @@ export class Store {
 
           // 호출할 콜백이 있는 경우!
           if (Array.isArray(this.observers[key])) {
-            this.observers[key].forEach((observer) => observer(val));
+            this.observers[key].forEach((observer) => observer(value));
           }
         },
       });
