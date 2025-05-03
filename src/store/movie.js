@@ -6,6 +6,7 @@ const store = new Store({
   page: 1,
   pageMax: 1,
   movies: [],
+  movie: {}, // 영화 상세 정보 상태 값
   loading: false,
   message: "Search for the movie title!",
 });
@@ -44,5 +45,15 @@ export const searchMovies = async (page) => {
     console.log("searchMovies error:", error);
   } finally {
     store.state.loading = false; // 로딩 상태 비활성화
+  }
+};
+
+// 영화 상세 정보를 가져오는 API
+export const getMovieDetails = async (id) => {
+  try {
+    const res = await fetch(`http://www.omdbapi.com?apikey=${process.env.PARCEL_OMDb_API_KEY}&i=${id}`);
+    store.state.movie = await res.json();
+  } catch (error) {
+    console.log("getMovieDetails Error:", error);
   }
 };
