@@ -12,7 +12,7 @@ export default class Movie extends Component {
     // 라우트 컴포넌트 요소 구성
     this.el.classList.add("container", "the-movie");
     this.el.innerHTML = /* html */ `
-      <div class="poster" style="background-image: url(${movie.Poster})"></div>
+      <div class="poster" style="background-image: url(${movie.Poster.replace("SX300", "SX700")})"></div>
       <div class="specs">
         <div class="title">${movie.Title}</div>
         
