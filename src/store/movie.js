@@ -4,8 +4,9 @@ import { Store } from "../core";
 const store = new Store({
   searchText: "",
   page: 1,
-  movies: [],
   pageMax: 1,
+  movies: [],
+  loading: false,
 });
 
 export default store;
@@ -13,6 +14,7 @@ export default store;
 // 입력한 검색어와 페이지 번호를 기준으로 영화 정보 API 요청
 export const searchMovies = async (page) => {
   store.state.page = page;
+  store.state.loading = true; // 로딩 상태 활성화
 
   // 새로운 검색어를 통해 영화를 검색할 경우 -> 초기화 (예외 처리)
   if (page === 1) {
@@ -29,4 +31,5 @@ export const searchMovies = async (page) => {
   store.state.movies = [...store.state.movies, ...Search];
 
   store.state.pageMax = Math.ceil(Number(totalResults) / 10); // 영화 최대 페이지 수
+  store.state.loading = false; // 로딩 상태 비활성화
 };
