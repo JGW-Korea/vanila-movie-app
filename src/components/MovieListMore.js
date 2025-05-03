@@ -25,8 +25,10 @@ export default class MovieListMore extends Component {
     this.el.classList.add("btn", "view-more", "hide");
     this.el.textContent = "View more...";
 
-    this.el.addEventListener("click", async () => {
-      await searchMovies(movieStore.state.page + 1);
+    // 더보기 버튼 클릭 시 추가 데이터 요청
+    this.el.addEventListener("click", () => {
+      this.el.classList.add("hide");
+      searchMovies(movieStore.state.page + 1);
     });
   }
 }
