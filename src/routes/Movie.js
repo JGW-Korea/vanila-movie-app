@@ -16,11 +16,9 @@ export default class Movie extends Component {
     `;
 
     await getMovieDetails(history.state.id); // 쿼리 스트링으로 보내진 id 값을 기준으로 영화 상세 정보 조회
-    console.log(movieStore.state.movie);
-
-    const { movie } = movieStore.state;
 
     // 라우트 컴포넌트 요소 구성
+    const { movie } = movieStore.state;
     this.el.innerHTML = /* html */ `
       <div class="poster" style="background-image: url(${movie.Poster.replace("SX300", "SX700")})"></div>
       <div class="specs">
