@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "parcel ./index.html",
-    "build": "parcel build ./index.html --public-url ./"
+    "build": "parcel build ./index.html --public-url ./",
+    "vercel": "vercel dev"
   },
   "keywords": [],
   "author": "",
@@ -11,6 +12,7 @@
   "description": "",
   "devDependencies": {
     "parcel": "^2.14.4",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "vercel": "^41.7.4"
   }
 }
