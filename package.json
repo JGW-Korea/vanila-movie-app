@@ -1,6 +1,7 @@
 {
   "name": "vanila-movie-app",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "parcel ./index.html",
     "build": "parcel build ./index.html --public-url ./",

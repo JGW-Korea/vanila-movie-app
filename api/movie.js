@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-const { OMDb_API_KEY } = process.env;
+const { OMDB_API_KEY } = process.env;
 
 // Vercel 서버리스 함수(Serverless Functions)
 // -> 서버리스 함수는 브라우저 환경이 아닌 Node.js 실행 환경에서 실행된다.
@@ -9,8 +9,8 @@ export default async function handler(request, response) {
   const { title, page, id } = JSON.parse(request.body);
 
   const url = id
-    ? `https://omdbapi.com?apikey=${OMDb_API_KEY}&i=${id}&plot=full`
-    : `https://omdbapi.com?apikey=${OMDb_API_KEY}&s=${title}&page=${page}`;
+    ? `https://omdbapi.com?apikey=${OMDB_API_KEY}&i=${id}&plot=full`
+    : `https://omdbapi.com?apikey=${OMDB_API_KEY}&s=${title}&page=${page}`;
 
   const res = await fetch(url);
   const json = await res.json();
