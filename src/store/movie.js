@@ -26,9 +26,13 @@ export const searchMovies = async (page) => {
 
   try {
     // 입력한 검색어에 맞는 영화 요청
-    const res = await fetch(
-      `http://www.omdbapi.com?apikey=${process.env.PARCEL_OMDb_API_KEY}&s=${store.state.searchText}&page=${page}`
-    );
+    const res = await fetch("/api/movie", {
+      method: "POST",
+      body: JSON.stringify({
+        title: store.state.searchText,
+        page,
+      }),
+    });
     const { Search, totalResults, Response, Error } = await res.json();
 
     // 정상적으로 영화 데이터를 가져왔을 경우
@@ -51,7 +55,12 @@ export const searchMovies = async (page) => {
 // 영화 상세 정보를 가져오는 API
 export const getMovieDetails = async (id) => {
   try {
-    const res = await fetch(`http://www.omdbapi.com?apikey=${process.env.PARCEL_OMDb_API_KEY}&i=${id}`);
+    const res = await fetch("/api/movie", {
+      method: "POST",
+      body: JSON.stringify({
+        id,
+      }),
+    });
     store.state.movie = await res.json();
   } catch (error) {
     console.log("getMovieDetails Error:", error);
