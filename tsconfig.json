@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2015", // 컴파일된 자바스크립트 코드의 버전
+    "module": "esnext", // JS 모듈 시스템 중 어떤 방식을 사용할 것인지
+    "moduleResolution": "node", // 모듈 해석 방법 지정
+    "esModuleInterop": true, // 다른 모듈 시스템 방식도 이해할 수 있게 지정
+    "lib": ["ESNext", "DOM"],
+    "strict": true
+  },
+  "include": ["src/**/*.ts", "api/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
