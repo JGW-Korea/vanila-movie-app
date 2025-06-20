@@ -1,8 +1,16 @@
 import { Component } from "../core";
+import { SimpleMovie } from "../store/movie";
+
+interface Props {
+  [key: string]: unknown;
+  movie: SimpleMovie;
+}
 
 // 단일 영화 카드 컴포넌트
 export default class MovieItem extends Component {
-  constructor(props) {
+  public props!: Props;
+
+  constructor(props: Props) {
     super({
       tagName: "a",
       props,

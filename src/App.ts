@@ -1,6 +1,6 @@
-import Footer from "./components/Footer";
-import Header from "./components/Header";
 import { Component } from "./core";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 // App 컴포넌트 -> 고정 영역(Header...)과 전환 영역(Router-View)을 구성하는 레이아웃 컴포넌트
 export default class App extends Component {

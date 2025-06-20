@@ -1,12 +1,61 @@
 import { Store } from "../core";
 
+interface StoreState {
+  searchText: string;
+  page: number;
+  pageMax: number;
+  movies: SimpleMovie[];
+  movie: DetailedMovie;
+  loading: boolean;
+  message: string;
+}
+
+export interface SimpleMovie {
+  Title: string;
+  Year: string;
+  imdbID: string;
+  Type: string;
+  Poster: string;
+}
+
+interface DetailedMovie {
+  Title: string;
+  Year: string;
+  Rated: string;
+  Released: string;
+  Runtime: string;
+  Genre: string;
+  Director: string;
+  Writer: string;
+  Actors: string;
+  Plot: string;
+  Language: string;
+  Country: string;
+  Awards: string;
+  Poster: string;
+  Ratings: {
+    Source: string;
+    Value: string;
+  }[];
+  Metascore: string;
+  imdbRating: string;
+  imdbVotes: string;
+  imdbID: string;
+  Type: string;
+  DVD: string;
+  BoxOffice: string;
+  Production: string;
+  Website: string;
+  Response: string;
+}
+
 // 영화 검색과 관련된 상태를 저장하는 전역 스토어
-const store = new Store({
+const store = new Store<StoreState>({
   searchText: "",
   page: 1,
   pageMax: 1,
   movies: [],
-  movie: {}, // 영화 상세 정보 상태 값
+  movie: {} as DetailedMovie, // 영화 상세 정보 상태 값
   loading: false,
   message: "Search for the movie title!",
 });
@@ -14,7 +63,7 @@ const store = new Store({
 export default store;
 
 // 입력한 검색어와 페이지 번호를 기준으로 영화 정보 API 요청
-export const searchMovies = async (page) => {
+export const searchMovies = async (page: number) => {
   store.state.page = page;
   store.state.loading = true; // 로딩 상태 활성화
 
@@ -53,7 +102,7 @@ export const searchMovies = async (page) => {
 };
 
 // 영화 상세 정보를 가져오는 API
-export const getMovieDetails = async (id) => {
+export const getMovieDetails = async (id: string) => {
   try {
     const res = await fetch("/api/movie", {
       method: "POST",
