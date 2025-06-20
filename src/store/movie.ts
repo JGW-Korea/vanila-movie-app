@@ -10,7 +10,7 @@ interface StoreState {
   message: string;
 }
 
-interface SimpleMovie {
+export interface SimpleMovie {
   Title: string;
   Year: string;
   imdbID: string;
