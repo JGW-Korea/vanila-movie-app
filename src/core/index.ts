@@ -29,38 +29,48 @@ export class Component {
   render() {}
 }
 
+// 라우트 타입 정의
+interface Route {
+  path: string;
+  component: typeof Component;
+}
+type Routes = Route[];
+
 // 라우터(Router) 전환 처리 -> 렌더링 로직
-function routerRender(routes) {
+function routerRender(routes: Routes) {
   // Hash Router가 아닌 경우 초기 경로를 "/#/"로 설정 (예외 처리)
   if (!location.hash) {
-    history.replaceState("", null, "/#/");
+    history.replaceState(null, "", "/#/");
   }
 
   const routerView = document.querySelector("router-view");
   const [hash, queryString = ""] = location.hash.split("?");
 
-  // Query String 파싱 -> History State에 저장
+  // 1) Query String 파싱 -> History State에 저장
+  interface Query {
+    [key: string]: string;
+  }
   const query = queryString.split("&").reduce((acc, curr) => {
     const [key, value] = curr.split("=");
     acc[key] = value;
     return acc;
-  }, {});
+  }, {} as Query);
 
   history.replaceState(query, ""); // 현재 히스토리 주소를 바꾸지 않고, 쿼리 스트링 값을 상태에 저장
 
-  // 현재 경로에 맞는 라우트(Route) 찾기
-  const currentRoute = routes.find((route) => new RegExp(`${route.path}/?$`).test(hash));
+  // 2) 현재 경로에 해당하는 라우트를 찾은 뒤, 라우터 뷰를 초기화하고 해당 컴포넌트를 렌더링
+  const currentRoute: Route | undefined = routes.find((route) => new RegExp(`${route.path}/?$`).test(hash));
+  if (routerView) {
+    routerView.innerHTML = ""; // 초기화 작업은 innerHTML로 진행해도 XSS 보안 위험 없음
+    currentRoute && routerView.append(new currentRoute.component().el);
+  }
 
-  // 라우터 뷰 초기화 후 해당 컴포넌트 렌더링
-  routerView.innerHTML = ""; // 초기화 작업은 innerHTML로 진행해도 XSS 보안 위험 없음
-  routerView.append(new currentRoute.component().el);
-
-  // 페이지 전환 시 스크롤을 맨 위로 초기화
+  // 3) 페이지 전환 시 스크롤을 맨 위로 초기화
   window.scrollTo(0, 0);
 }
 
 // 라우터 도구 정의 -> 초기화 + 이벤트 등록
-export function createRouter(routes) {
+export function createRouter(routes: Routes) {
   return function () {
     // popstate 이벤트 감지 -> URL 변경 시 라우트 렌더링
     window.addEventListener("popstate", () => {
