@@ -1,6 +1,20 @@
 // 모든 컴포넌트의 기반이 되는 클래스 정의
+interface ComponentPayload {
+  tagName?: string;
+  state?: {
+    [key: string]: unknown;
+  };
+  props?: {
+    [key: string]: unknown;
+  };
+}
+
 export class Component {
-  constructor(payload = {}) {
+  public el;
+  public state;
+  public props;
+
+  constructor(payload: ComponentPayload = {}) {
     const { tagName, state = {}, props = {} } = payload;
 
     this.el = document.createElement(tagName || "div"); // 지정된 태그 이름으로 DOM 요소 생성 (기본값: div)
