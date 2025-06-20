@@ -83,11 +83,19 @@ export function createRouter(routes: Routes) {
 }
 
 // 상태 관리(State Management) 클래스 정의
-export class Store {
-  constructor(state) {
-    this.state = {}; // 외부 접근용 상태 객체
-    this.observers = {}; // 상태 변경 시 실행될 콜백 목록
+interface StoreObservers {
+  [key: string]: SubscribeCallback[];
+}
 
+interface SubscribeCallback {
+  (arg: unknown): void;
+}
+
+export class Store<T> {
+  public state = {} as T; // 외부 접근용 상태 객체
+  private observers = {} as StoreObservers; // 상태 변경 시 실행될 콜백 목록
+
+  constructor(state: T) {
     // 상태를 key 단위로 감싸서 변경 감지 및 알림 처리
     for (const key in state) {
       Object.defineProperty(this.state, key, {
@@ -105,7 +113,7 @@ export class Store {
   }
 
   // 상태 변경을 감지할 콜백 함수를 등록하는 메서드
-  subscribe(key, cb) {
+  subscribe(key: string, cb: SubscribeCallback) {
     Array.isArray(this.observers[key]) ? this.observers[key].push(cb) : (this.observers[key] = [cb]);
   }
 }
